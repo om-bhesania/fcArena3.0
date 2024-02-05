@@ -482,15 +482,7 @@ const Dashboard = () => {
                                 </span>
                                  {(() => {
                                   const badgeComponents = [];
-                                  const timeSlot_arr = booking.timeSlots || []; // Ensure timeSlot_arr is an array
-                              
-                                  if (timeSlot_arr.length === 0) {
-                                      toast({
-                                          title: "Error",
-                                          description: "Error fetching time slot",
-                                          status: "error"
-                                      });
-                                  } else {
+                                  const timeSlot_arr = booking.timeSlots;
                                       for (let i = 0; i < timeSlot_arr.length; i++) {
                                           const slot = timeSlot_arr[i];
                                           badgeComponents.push(
@@ -502,9 +494,7 @@ const Dashboard = () => {
                                               </Badge>
                                           );
                                       }
-                                  }
-                              
-                                  return badgeComponents;
+                                   return badgeComponents;
                               })()}
                               </div>
                             </Box>
