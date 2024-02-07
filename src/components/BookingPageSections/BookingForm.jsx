@@ -39,16 +39,16 @@ const BookingsForm = () => {
 
 
   const handleTimeSlotSelection = (selectedSlot,price) => {
-
+    let amt = parseInt(price);
     setSelectedSlots(prevSelectedSlots => {
       const updatedSelectedSlots = [...prevSelectedSlots];
       const index = updatedSelectedSlots.indexOf(selectedSlot);
       if (index > -1) {
         updatedSelectedSlots.splice(index, 1);
-        setTotalPrice(totalPrice - price)
+        setTotalPrice(totalPrice - amt)
       } else {
         updatedSelectedSlots.push(selectedSlot);
-        setTotalPrice(totalPrice + price);
+        setTotalPrice(totalPrice + amt);
       }
       return updatedSelectedSlots;
     });
