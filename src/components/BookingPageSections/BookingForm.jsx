@@ -36,23 +36,15 @@ const BookingsForm = () => {
   const urlParams = new URLSearchParams(window.location.search);
   const paymentSuccess = urlParams.get("PaymentSuccess");
 
-
-
-  const handleTimeSlotSelection = (selectedSlot,price) => {
-    let amt = parseInt(price);
-    setSelectedSlots(prevSelectedSlots => {
-      const updatedSelectedSlots = [...prevSelectedSlots];
-      const index = updatedSelectedSlots.indexOf(selectedSlot);
-      if (index > -1) {
-        updatedSelectedSlots.splice(index, 1);
-        setTotalPrice(totalPrice - amt)
-      } else {
-        updatedSelectedSlots.push(selectedSlot);
-        setTotalPrice(totalPrice + amt);
-      }
-      return updatedSelectedSlots;
-    });
+  const handleTimeSlotSelection = (selectedSlot, price) => {
+    
+    let amt = parseInt(price, 10);
+    const updatedSlots = [...selectedSlots, selectedSlot];
+    setSelectedSlots(updatedSlots);
+    const updatedTotalPrice = totalPrice + amt;
+    setTotalPrice(updatedTotalPrice);
   };
+
 
   const handlePaymentSuccess = () => {
     toast({
@@ -274,11 +266,29 @@ const BookingsForm = () => {
               {selectedDate && selectedSlots.length > 0 && (
                 <div>
                   <FormLabel className="text-xl text-primary font-bold">
-                    Selected Time Slots 
+                    Selected Time Slots
                   </FormLabel>
                   <ul>
                     {selectedSlots.map((selectedSlot, index) => (
-                      <li key={index}>{selectedSlot}</li>
+                      <div className="flex items-center justify-between gap-4" key={index}>
+                        <li>{selectedSlot}</li>
+                        <div className="cursor-pointer flex-shrink-0" onClick={() => {
+                          // Remove the selected slot and update the total price
+                          const updatedSlots = selectedSlots.filter((s) => s !== selectedSlot);
+                          setSelectedSlots(updatedSlots);
+
+                          const removedSlotObject = availableSlots.find(
+                            (slot) => slot.time === selectedSlot
+                          );
+                          if (removedSlotObject) {
+                            const prices = removedSlotObject.price;
+                            const updatedTotalPrice = totalPrice - prices;
+                            setTotalPrice(updatedTotalPrice);
+                          }
+                        }}>
+                          <i className="fa-solid fa-xmark text-red-600 font-bold text-lg"></i>
+                        </div>
+                      </div>
                     ))}
                   </ul>
                 </div>
